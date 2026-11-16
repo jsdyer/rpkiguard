@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Live RPKI origin validation with an explanation of each matching route authorization.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://stat.ripe.net; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>RPKI Guard · CoolCode</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.mjs"></script>
+</head>
+<body>
+<header class="mast"><nav class="wrap nav" aria-label="Main"><a class="brand" href="https://coolcode.ca/">$_ CoolCode.ca</a><a href="https://coolcode.ca/routearchaeologist/">Route Archaeologist ↗</a></nav>
+<div class="wrap hero"><h1>RPKI <span>Guard</span></h1><p>Check whether a network’s published route authorizations allow a particular AS to originate a prefix. Start with an exact pair or discover the route currently seen for an IP.</p></div></header>
+<main class="wrap stack" id="main">
+  <div class="grid">
+    <section class="panel stack" aria-labelledby="pair-heading">
+      <h2 id="pair-heading">Validate a route</h2>
+      <form id="validation" class="stack">
+        <div class="row"><label class="field">Origin ASN<input name="asn" value="AS3333" maxlength="14" spellcheck="false" required></label><label class="field">IP prefix<input name="prefix" value="193.0.0.0/21" maxlength="52" spellcheck="false" required></label><button class="primary">Validate</button></div>
+      </form>
+      <div class="chips" aria-label="Example routes">
+        <button data-asn="3333" data-prefix="193.0.0.0/21">RIPE NCC</button>
+        <button data-asn="15169" data-prefix="193.0.0.0/21">Compare origin</button>
+        <button data-asn="3333" data-prefix="193.0.0.0/24">Compare length</button>
+      </div>
+    </section>
+    <section class="panel stack" aria-labelledby="discovery-heading">
+      <h2 id="discovery-heading">Find the observed prefix</h2>
+      <form id="discovery"><div class="row"><label class="field">Public IP address<input name="ip" placeholder="8.8.8.8 or 2001:4860:4860::8888" maxlength="48" spellcheck="false" required></label><button>Find origin</button></div></form>
+      <p class="muted">RIPEstat Network Info reports a prefix and origins from route collector observations. Select an origin to validate the pair.</p>
+      <div id="origins" class="chips" hidden></div>
+    </section>
+  </div>
+  <p id="status" class="status" role="status">Live queries go to RIPE NCC after submission.</p>
+  <section id="result" class="panel stack result" aria-labelledby="verdict" hidden>
+    <div class="row spread"><h2 id="verdict"></h2><span id="subject" class="badge"></span></div>
+    <p id="meaning"></p>
+    <p id="lookup-time" class="muted"></p>
+    <div id="roa-data" class="table" tabindex="0" aria-label="Covering authorizations"><table><thead><tr><th scope="col">VRP prefix</th><th scope="col">Authorized AS</th><th scope="col">Max. length</th><th scope="col">Match</th></tr></thead><tbody id="roas"></tbody></table></div>
+    <p id="no-roas" class="muted" hidden>No covering entries were returned for this query.</p>
+    <div class="links detail"><a id="raw" href="https://stat.ripe.net/">Raw RIPEstat response ↗</a><a id="history" href="https://coolcode.ca/routearchaeologist/">Observed route history ↗</a><button type="button" id="copy">Copy lookup link</button></div>
+  </section>
+  <section class="panel stack" aria-labelledby="concepts"><h2 id="concepts">Reading the result</h2>
+    <p>A Route Origin Authorization (ROA) names an AS that may originate an address block and can set a maximum prefix length. Validators turn signed ROAs into validated payloads (VRPs).</p>
+    <ul class="list"><li><strong>Valid.</strong> At least one covering entry authorizes the selected AS and permits the prefix length.</li><li><strong>Invalid origin or length.</strong> A covering entry exists but no entry authorizes that exact pair.</li><li><strong>Unknown.</strong> The validator had no covering entry. The result describes current origin authorization. Observed route history is a separate measurement.</li></ul>
+  </section>
+</main>
+<footer class="wrap foot"><a href="https://stat.ripe.net/docs/data-api/api-endpoints/rpki-validation">RIPEstat validation documentation</a><a href="https://stat.ripe.net/docs/data-api/api-endpoints/network-info">Network Info documentation</a><a href="https://github.com/jsdyer/rpkiguard">Source repository</a></footer>
+</body>
+</html>
