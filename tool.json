@@ -1,0 +1,25 @@
+{
+  "id": "rpkiguard",
+  "title": "RPKI Guard",
+  "description": "Check whether a route origin ASN and prefix are authorized by published ROAs.",
+  "category": "liminal-tools",
+  "tags": [
+    "bgp",
+    "rpki",
+    "roa",
+    "asn",
+    "invalid",
+    "routing",
+    "max",
+    "length"
+  ],
+  "icon": "badge-check",
+  "url": "/rpkiguard/",
+  "source": "https://github.com/jsdyer/rpkiguard",
+  "hosting": "project",
+  "access": "browser",
+  "data_info": {
+    "mode": "live",
+    "detail": "RIPEstat checks the submitted prefix and origin ASN on demand."
+  }
+}
